@@ -1,0 +1,231 @@
+{% assign itemType = product %}
+{% if template contains 'search' %}
+  {% assign itemType = item %}
+{% elsif template contains 'product' %}
+  {% assign itemType = prod %}
+{% endif %}
+
+{% assign selected_variant = itemType.selected_or_first_available_variant %}
+
+{% if enable_product_details_overlay %}
+  {% capture cardType %} product-card-alt{% endcapture %}
+{% endif %}
+
+{% capture product_card_details %}
+  <div class="product-card-details">
+    {% if brandNames %}
+      <h3 class="brand">
+        {% if onboarding %}
+          {{ 'onboarding.product_vendor' | t }}
+        {% else %}
+          {{ itemType.vendor | link_to_vendor }}
+        {% endif %}
+      </h3>
+    {% endif %}
+
+    <h2 class="title">
+      {% if onboarding %}
+        {{ 'onboarding.product_name' | t }}
+      {% else %}
+        <a href="{{ itemType.url | within: collection }}">
+          {{ itemType.title }}
+        </a>
+      {% endif %}
+    </h2>
+
+    {% if onboarding %}
+      <p class="price"><span class="money">{{ 'onboarding.product_price' | t }}</span></p>
+    {% else %}
+      {% if itemType.compare_at_price_min > itemType.price_min %}
+        <p class="price sale"><span class="original money">{{ itemType.compare_at_price_min | money_without_currency }}</span> <span class="money">{{ itemType.price_min | money }}</span></p>
+      {% else %}
+        <p class="price"><span class="money">{{ itemType.price_min | money }}</span></p>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% capture product_card_details_overlay %}
+  <div class="product-card-details">
+    {% if brandNames %}
+      <h3 class="brand">
+        {% if onboarding %}
+          {{ 'onboarding.product_vendor' | t }}
+        {% else %}
+          {{ itemType.vendor }}
+        {% endif %}
+      </h3>
+    {% endif %}
+
+    <h2 class="title">
+      {% if onboarding %}
+        {{ 'onboarding.product_name' | t }}
+      {% else %}
+        {{ itemType.title }}
+      {% endif %}
+    </h2>
+
+    {% if onboarding %}
+      <p class="price"><span class="money">{{ 'onboarding.product_price' | t }}</span></p>
+    {% else %}
+      {% if itemType.compare_at_price_min > itemType.price_min %}
+        <p class="price sale"><span class="original money"> {{ itemType.compare_at_price_min | money }}</span> <span class="money">{{ itemType.price_min | money }}</span></p>
+      {% else %}
+        <p class="price"><span class="money">{{ itemType.price_min | money }}</span></p>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% capture product_card_interactions %}
+  <div class="product-card-interactions">
+    {% if enableQuickshop %}
+      <button
+        class="product-card-interaction product-card-interaction-quickshop"
+        data-product-card-interaction-quickshop
+        data-product-sha256="{{ itemType | json | sha256 }}"
+        data-product-url="{{ itemType.url | within: collection }}"
+        {% if onboarding %}
+          disabled
+        {% endif %}
+      >
+        {{ 'products.product_item.quickshop' | t }}
+      </button>
+    {% endif %}
+
+    {% if enableATC %}
+      <button
+        class="product-card-interaction product-card-interaction-addtocart"
+        {% unless selected_variant.available %}
+          disabled
+        {% endunless %}
+        {% if onboarding %}
+          disabled
+        {% endif %}
+        data-product-card-interaction-addtocart
+        data-product-variant-id="{{ itemType.selected_or_first_available_variant.id }}"
+      >
+        <span class="product-card-interaction-addtocart-available">
+          {% if selected_variant.available %}
+            {{ 'products.product_item.add_to_cart' | t }}
+          {% else %}
+            {{ 'products.product_item.sold_out' | t }}
+          {% endif %}
+        </span>
+
+        <span class="product-card-interaction-addtocart-error">
+          {{ 'products.product_item.unavailable' | t }}
+        </span>
+
+        <div class="product-card-interaction-addtocart-spinner">
+          {% include 'icon' with 'spinner' %}
+        </div>
+      </button>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+<li
+  class="
+    product
+    product-{{ itemType.id }}
+    {% include 'for-looper' %} {% cycle 'flush', '', '', '' %}
+    {{ cardType }}
+  "
+  data-product-item
+>
+  {% assign productImageSize = 'grande' %}
+
+  <div class="product-inner">
+    <figure class="product-card-figure">
+      {% if settings.product_grid_aspect_ratio != 'default' %}
+        <span
+          class="product-card-figure-ie"
+          {%
+            include 'rimg',
+            img: itemType.featured_image,
+            size: '600x600',
+            crop: 'center',
+            background: true,
+            lazy: true,
+          %}
+          role="img"
+          aria-label="{{ itemType.featured_image.alt }}"
+        ></span>
+
+        {% if settings.show_product_secondary_image and itemType.images.size > 1 %}
+          <span
+            class="product-card-figure-ie"
+            {%
+              include 'rimg',
+              img: itemType.images[1],
+              size: '600x600',
+              crop: 'center',
+              background: true,
+              lazy: true,
+            %}
+            role="img"
+            aria-label="{{ itemType.images[1].alt }}"
+          ></span>
+        {% endif %}
+      {% endif %}
+
+      {% if itemType.featured_image %}
+        {%
+          include 'rimg',
+          img: itemType.featured_image,
+          size: '600x',
+          lazy: true,
+        %}
+
+        {% if settings.show_product_secondary_image and itemType.images.size > 1 %}
+          {%
+            include 'rimg',
+            img: itemType.images[1],
+            size: '600x',
+            lazy: true,
+          %}
+        {% endif %}
+      {% else %}
+        {%- capture index -%}
+          {%- cycle '1', '2', '3', '4', '5', '6' -%}
+        {%- endcapture -%}
+        {{ 'product-' | append: index | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+
+      {% unless onboarding %}
+        <a href="{{ itemType.url | within: collection }}" class="{% if imageBorders %}with-border{% endif %}"></a>
+      {% endunless %}
+
+      <{% if onboarding %}div{% else %}a{% endif %}
+        class="
+          product-card-overlay
+          {% if enableQuickshop == false and enableATC == false %}product-card-overlay--hide{% endif %}
+        "
+        {% unless onboarding %}href="{{ itemType.url | within: collection }}"{% endunless %}
+      >
+        <div class="product-card-overlay-content">
+          {% if settings.enable_product_details_overlay %}
+            {{ product_card_details_overlay }}
+          {% else %}
+            {{ product_card_interactions }}
+          {% endif %}
+        </div>
+      </{% if onboarding %}div{% else %}a{% endif %}>
+
+      {% include 'product-badges' %}
+    </figure>
+
+    <div class="product-card-footer">
+      {% if settings.enable_product_details_overlay %}
+        {{ product_card_interactions }}
+      {% else %}
+        {{ product_card_details }}
+      {% endif %}
+    </div>
+
+    <div class="product-card-footer-mobile">
+      {{ product_card_details }}
+    </div>
+  </div>
+</li>

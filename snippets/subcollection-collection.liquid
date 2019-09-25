@@ -1,0 +1,25 @@
+<div
+  class="
+    subcollection
+    content-area
+  "
+>
+  <div
+    class="
+      subcollection-container
+      subcollection-collection
+      collections
+      row-of-3
+    "
+  >
+    {% if onboarding %}
+      {% for i in (1..6) %}
+        {% include 'collection-list-item' %}
+      {% endfor %}
+    {% else %}
+      {% for link in linklists[collection.handle].links %}
+        {% include 'collection-list-item' with 'linklist' %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>

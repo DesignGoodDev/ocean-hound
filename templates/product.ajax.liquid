@@ -1,0 +1,59 @@
+{% layout none %}
+
+{% assign product_json = product | json %}
+{% assign product_json_sha256 = product_json | sha256 %}
+
+{% capture settings_string %}
+  {{ settings.show-brand-names }}
+  {{ settings.quickshop-product-email-link }}
+  {{ settings.image-borders }}
+  {{ settings.quickshop-product-quantity-option }}
+  {{ settings.quickshop_show_spb }}
+  {{ settings.quickshop-thumb-orientation }}
+  {{ settings.quickshop_enable_cart_redirect }}
+  {{ settings.quickshop_image_zoom }}
+  {{ 'products.product.add_to_cart' | t }}
+  {{ 'products.product.sold_out' | t }},
+  {{ 'products.product.unavailable' | t }}
+{% endcapture %}
+{% assign settings_sha256 = settings_string | sha256 %}
+
+<template data-options>
+  {
+    "product": {{ product_json }},
+    "productSettings": {
+      "cartRedirect": {{ settings.quickshop_enable_cart_redirect | t | json }},
+      "addToCartText": {{ 'products.product.add_to_cart' | t | json }},
+      "enableHistory": false,
+      "imageZoom": {{ settings.quickshop_image_zoom | json }},
+      "linkedOptions": true,
+      "soldOutText": {{ 'products.product.sold_out' | t | json }},
+      "thumbOrientation": {{ settings.quickshop-thumb-orientation | json }},
+      "unavailableText": {{ 'products.product.unavailable' | t | json }}
+    },
+    "product_sha256": {{ product_json_sha256 | json }},
+    "settings_sha256": {{ settings_sha256 | json }},
+    "moneyFormat": {{ shop[settings.currency_display_format] | default: shop.money_format | strip_html | json }}
+  }
+</template>
+
+<template data-html>
+  {%
+    include 'product',
+    fitting_guide_icon: settings.quickshop_fitting_guide_icon,
+    fitting_guide_url: settings.quickshop_fitting_guide_url,
+    lazy_load: true,
+    show_brand_names: settings.show-brand-names,
+    show_email_link: settings.quickshop-product-email-link,
+    show_image_borders: settings.image-borders,
+    show_quantity: settings.quickshop-product-quantity-option,
+    show_spb: settings.quickshop_show_spb,
+    thumb_orientation: settings.quickshop-thumb-orientation,
+    show_sku: settings.quickshop_show_variant_sku,
+    use_image_zoom: settings.quickshop_image_zoom,
+    show_description: true,
+    callout: true,
+    variant_options_style: settings.quickshop_variant_options_style,
+    show_social_buttons: settings.quickshop_social_sharing_buttons,
+  %}
+</template>

@@ -1,0 +1,6 @@
+development:
+  password: ${THEMEKIT_PASSWORD}
+  theme_id: "77290668101"
+  store: ocean-hound.myshopify.com
+  ignore_files:
+  - config/settings_data.json

@@ -1,0 +1,66 @@
+{% capture collectionImage %}collection-{% cycle '1', '2', '3', '4', '5' %}{% endcapture %}
+{% assign collectionImage = collectionImage | placeholder_svg_tag: 'placeholder-svg' %}
+{% assign collectionTitle = 'onboarding.collection_title' | t %}
+
+{% unless onboarding %}
+  {% if collection-list-item == 'linklist' %}
+    {% assign collection = link.object %}
+  {% endif %}
+
+  {% assign currentCollection = collection %}
+
+  {% if currentCollection == blank %}
+    {% continue %}
+  {% endif %}
+
+  {% if collection.image %}
+    {% assign collectionImage = collection.image.src %}
+  {% else %}
+    {% assign collectionImage = collection.products.first.featured_image %}
+  {% endif %}
+  {% assign collectionTitle = currentCollection.title %}
+  {% assign collectionDescription = currentCollection.description %}
+  {% capture collectionProducts %}
+    {% for product in currentCollection.products limit: 4 %}
+      {% include 'product-item' %}
+    {% else %}
+      <p class="empty">
+        {{ 'collections.collection.no_products' | t }}
+      </p>
+    {% endfor %}
+  {% endcapture %}
+{% endunless %}
+
+<a
+  href="{{ collection.url }}"
+  class="collection-wrap first"
+>
+  {% unless onboarding %}
+    <div
+      class="collection"
+      {%
+        include 'rimg'
+        img: collectionImage,
+        size: '480x480',
+        crop: 'center',
+        background: true,
+        lazy: true
+      %}
+    >
+      {%
+        include 'rimg'
+        img: collectionImage,
+        size: '480x480',
+        crop: 'center',
+        lazy: true
+      %}
+    </div>
+  {% else %}
+    <div class="collection collection-onboarding">
+      {{ collectionImage }}
+    </div>
+  {% endunless %}
+
+  <h2 class="label preload">{{ collectionTitle }}</h2>
+  <div class="rte clearfix">{{ collectionDescription }}</div>
+</a>

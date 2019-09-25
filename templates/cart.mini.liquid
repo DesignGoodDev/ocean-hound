@@ -1,0 +1,121 @@
+{% layout none %}
+
+<template data-options>
+  {}
+</template>
+
+<template data-html="content">
+  {% if cart.item_count > 0 %}
+    {% for item in cart.items %}
+      {%- assign item_has_discounts = false -%}
+      {%- if item.line_level_discount_allocations.size > 0 -%}
+        {%- assign item_has_discounts = true -%}
+      {%- endif -%}
+      <div
+        class="cart-mini-item"
+        data-cart-mini-item="{{ item.id }}"
+      >
+        <div class="cart-mini-item-row">
+          <div
+            class="
+              cart-mini-item-column
+              cart-mini-item-column-image
+            "
+          >
+            <figure class="cart-mini-item-image">
+              {%
+                include 'rimg'
+                img: item.image,
+                alt: item.image.alt,
+                size: '80x',
+                lazy: false
+              %}
+            </figure>
+          </div>
+
+          <div
+            class="
+              cart-mini-item-column
+              cart-mini-item-column-details
+            "
+          >
+            <span class="cart-mini-item-vendor">{{ item.vendor }}</span>
+
+            <span class="cart-mini-item-title">
+              <a href="{{ item.product.url }}">
+                {{ item.product.title }}
+              </a>
+            </span>
+
+            {% unless item.product.has_only_default_variant %}
+              <span class="cart-mini-item-variant">{{ item.variant.title }}</span>
+            {% endunless %}
+
+            <span class="cart-mini-item-quantity">{{ 'layout.mini_cart.quantity_item' | t: qty: item.quantity }}</span>
+
+            {%- if item_has_discounts -%}
+              <ul class="cart-mini-item-discounts">
+                {% for discount_allocation in item.line_level_discount_allocations %}
+                  <li>
+                    {% include 'icon' with 'sale-tag' %}
+                    {{ discount_allocation.discount_application.title }}
+                    (-<span class="money">{{ discount_allocation.amount | money }}</span>)
+                  </li>
+                {% endfor %}
+              </ul>
+            {%- endif -%}
+
+            <div class="cart-mini-item-details-footer">
+              <div class="cart-mini-item-prices">
+                {%- if item_has_discounts -%}
+                  <s class="cart-mini-item-original-price cart-mini-item-price money">{{ item.original_line_price | money }}</s>
+                {%- endif -%}
+                <span class="cart-mini-item-final-price cart-mini-item-price money">{{ item.final_line_price | money }}</span>
+              </div>
+              <div
+                class="cart-mini-item-remove"
+                aria-label="remove"
+                role="button"
+                data-cart-mini-item-remove="{{ item.key }}"
+              >
+                {{ 'layout.mini_cart.remove_item' | t }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="cart-mini-empty">
+      {{ 'cart.empty' | t }}
+    </div>
+  {% endif %}
+</template>
+
+<template data-html="footer">
+  {% if cart.item_count > 0 %}
+    {%- if cart.cart_level_discount_applications.size > 0 -%}
+      <ul class="cart-mini-discounts" data-cart-discounts>
+        {% include 'cart-discounts' %}
+      </ul>
+    {%- endif -%}
+    <div class="cart-mini-subtotal">
+      <span class="cart-mini-subtotal-heading">{{ 'layout.mini_cart.subtotal' | t }}</span>
+      <span class="cart-mini-subtotal-value money">{{ cart.total_price | money }}</span>
+    </div>
+
+    <div class="cart-mini-actions">
+      <a class="cart-mini-actions-cart action-button desaturated" href="/cart">
+        {{ 'layout.mini_cart.view_cart' | t }}
+      </a>
+
+      <a class="cart-mini-actions-checkout action-button submit-button" href="/checkout">
+        {% if settings.enable_checkout_lock_icon %}
+          {% include 'icon' with 'checkout-lock' %}
+        {% endif %}
+        <span>{{ 'layout.mini_cart.checkout' | t }}</span>
+      </a>
+    </div>
+  {% endif %}
+</template>

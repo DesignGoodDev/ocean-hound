@@ -1,0 +1,25 @@
+
+<div class="header-minimal {% if headerCenter %}header-minimal-centered{% endif %}">
+  {% if headerCenter %}
+    {% include 'header-fullnav' %}
+    {%
+      include 'header-storetitle',
+      headerLayout: headerLayout,
+      headerCenter: headerCenter
+    %}
+  {% else %}
+    {%
+      include 'header-storetitle',
+      headerLayout: headerLayout,
+      headerCenter: headerCenter
+    %}
+    {% include 'header-fullnav' %}
+  {% endif %}
+
+  {%
+    include 'header-tools',
+    type: 'header-minimal',
+    layout: headerLayout
+    logoCentered: headerCenter,
+  %}
+</div>

@@ -1,0 +1,93 @@
+<div class="main-header--tools tools clearfix">
+  <div class="main-header--tools-group">
+    <div class="main-header--tools-left">
+      {% if type == 'header-minimal' %}
+        {% if section.settings.social-icons %}
+          {% include 'social-links' %}
+        {% endif %}
+      {% endif %}
+
+      <div class="tool-container">
+        {% include 'currency-selector' %}
+
+        <a
+          class="menu"
+          href=""
+          class="nav-item dropdown first"
+          aria-haspopup="true"
+          aria-controls="main-header--mobile-nav"
+          aria-expanded="false"
+          aria-label="{{ linklists[section.settings.menu].title }}"
+        >
+          {% include 'icon' with 'menu' %}
+        </a>
+
+        {% assign alignment = 'left' %}
+        {% if layout == 'minimal' %}
+          {% assign alignment = 'right' %}
+        {% elsif layout == 'minimal-sticky' %}
+          {% assign alignment = 'right' %}
+        {% elsif layout == 'normal' %}
+          {% if logoCentered %}
+            {% assign alignment = 'left' %}
+          {% else %}
+            {% assign alignment = 'right' %}
+          {% endif %}
+        {% endif %}
+
+        {%
+          include 'live-search',
+          show_label: section.settings.show-labels,
+          layout: layout,
+          alignment: alignment,
+          display: section.settings.live_search_display
+        %}
+      </div>
+
+    {% unless type == 'header-minimal' %}
+    </div>
+
+    <div class="main-header--tools-right">
+    {% endunless %}
+      <div class="tool-container">
+        {% unless type == 'header-minimal' %}
+          {% if section.settings.social-icons %}
+            {% include 'social-links' %}
+          {% endif %}
+        {% endunless %}
+
+        {% if shop.customer_accounts_enabled %}
+          {% if customer %}
+            <a class="account-options" href="/account">
+              {% include 'icon' with 'person' %}
+
+              <label class="main-header--tools-label">
+                {{ 'general.account' | t }}
+              </label>
+            </a>
+          {% else %}
+            <a class="account-options" href="/account/login">
+              {% include 'icon' with 'person' %}
+
+              {% if section.settings.show-labels %}
+                <label class="main-header--tools-label">
+                  {{ 'layout.header.login' | t }}
+                </label>
+              {% endif %}
+            </a>
+          {% endif %}
+        {% endif %}
+
+        <div class="mini-cart-wrap" data-cart-mini-toggle>
+          <span class="item-count" data-cart-mini-count>{%- if cart.item_count != 0 -%}{{- cart.item_count -}}{%- endif -%}</span>
+
+          {% if cartIcon == "cart" %}
+            {% include 'icon' with 'cart' %}
+          {% else %}
+            {% include 'icon' with 'bag' %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

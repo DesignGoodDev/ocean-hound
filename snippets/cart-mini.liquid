@@ -1,0 +1,20 @@
+<div class="cart-mini" data-cart-mini>
+  <div class="cart-mini-sidebar" data-cart-mini-sidebar>
+    <div class="cart-mini-header">
+      {{ 'layout.mini_cart.heading' | t }}
+
+      <div
+        class="cart-mini-header-close"
+        role="button"
+        aria-label="close"
+        data-cart-mini-close
+      >
+        {% include 'icon' with 'close-alt' %}
+      </div>
+    </div>
+
+    <div class="cart-mini-content cart-mini-items" data-cart-mini-content></div>
+
+    <div class="cart-mini-footer" data-cart-mini-footer></div>
+  </div>
+</div>

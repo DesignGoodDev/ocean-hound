@@ -1,0 +1,433 @@
+{% assign fitting_guide_icon = fitting_guide_icon | default: blank %}
+{% assign fitting_guide_url = fitting_guide_url | default: blank %}
+{% assign lazy_load = lazy_load | default: false %}
+{% assign show_brand_names = show_brand_names | default: false %}
+{% assign show_email_link = show_email_link | default: false %}
+{% assign show_image_borders = show_image_borders | default: false %}
+{% assign show_quantity = show_quantity | default: false %}
+{% assign show_spb = show_spb | default: false %}
+{% assign thumb_orientation = thumb_orientation | default: blank %}
+{% assign use_fullsize_viewer = use_fullsize_viewer | default: false %}
+{% assign use_image_zoom = use_image_zoom | default: false %}
+
+{% assign selected_variant = product.selected_or_first_available_variant %}
+{% assign is_default = product.has_only_default_variant %}
+
+<section
+  class="
+    product-area
+    clearfix
+  "
+>
+  <script type="application/json" data-images>
+    {
+      {%- for image in product.images %}
+        {%- capture data_attr -%}
+          data-image-zoom="{{ image.id }}"
+        {%- endcapture -%}
+
+        {%- capture rimg_string -%}
+          {%
+            include 'rimg',
+            img: image,
+            size: '1050x',
+            attr: data_attr,
+            lazy: lazy_load
+          %}
+        {%- endcapture -%}
+        "{{ image.id }}": {{ rimg_string | strip_newlines | json }}{%- unless forloop.last %},{%- endunless -%}
+      {%- endfor -%}
+    }
+  </script>
+
+  <div
+    class="
+      showcase
+      product-images
+      {% if use_image_zoom %}zoom-enabled{% endif %}
+      {% if thumb_orientation == 'left' and product.images.size > 1 %}left-main-image{% endif %}
+    "
+  >
+    {% if thumb_orientation == 'list' %}
+      {% if product != empty %}
+        {% if product.images.size > 0 %}
+          {% for image in product.images %}
+            <div
+              class="container wide"
+            >
+              <div class="product-main-image wrap">
+                <div class="image-list-item {% if show_image_borders %}with-borders{% endif %}">
+                  {%- capture data_attr -%}
+                    data-image-zoom="{{ image.id }}"
+                  {%- endcapture -%}
+
+                  {%
+                    include 'rimg'
+                    img: image,
+                    size: '1024x1024',
+                    attr: data_attr,
+                    lazy: lazy_load,
+                    attr: imageAttr
+                  %}
+
+                  {% if show_image_borders %}
+                    <span class="overlay"></span>
+                  {% endif %}
+
+                  {% if use_image_zoom %}
+                    {%
+                      include 'photoswipe',
+                      photoswipe_images: product.images
+                    %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="product-main-image wrap">
+            <div class="image-list-item {% if show_image_borders %}with-borders{% endif %}">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <div
+          class="container wide"
+        >
+          <div class="product-main-image wrap">
+            <div class="image-list-item {% if show_image_borders %}with-borders{% endif %}">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% else %}
+      {% if product != empty %}
+        <div
+          class="
+            container
+            {% if product.images.size == 1 or thumb_orientation == 'below' %}
+              wide
+            {% endif %}
+          "
+        >
+          <div class="product-main-image wrap {% if show_image_borders %}with-borders{% endif %}">
+            {% assign featured_image = selected_variant.image | default: product.featured_image %}
+
+            {% if featured_image %}
+              {%- capture data_attr -%}
+                data-image-zoom="{{ featured_image.id }}"
+              {%- endcapture -%}
+
+              {%
+                include 'rimg'
+                img: featured_image,
+                size: '1024x1024',
+                attr: data_attr,
+                lazy: lazy_load
+              %}
+
+              {% if use_image_zoom %}
+                {%
+                  include 'photoswipe',
+                  photoswipe_images: product.images
+                %}
+              {% endif %}
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+
+            {% if show_image_borders %}
+              <span class="overlay"></span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if product.images.size > 1 %}
+          <div class="pager {% if thumb_orientation == 'below' %}below-main-image{% endif %} {% if thumb_orientation == 'left' %}left-main-image{% endif %} {% if show_image_borders %}with-borders{% endif %}">
+            <div class="inner">
+              {% for image in product.images %}
+                <div class="wrap thumb {% include 'for-looper' %} {% if forloop.first %}active{% endif %}">
+                  {% capture hi_res_attr %}
+                    data-high-res-url="{{ image.src | product_img_url: '2000x' }}"
+                    data-image-id="{{ image.id }}"
+                  {% endcapture %}
+
+                  {%
+                    include 'rimg'
+                    img: image,
+                    size: '100x100',
+                    attr: hi_res_attr,
+                    lazy: lazy_load
+                  %}
+
+                    <span class="overlay"></span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <div
+          class="container wide"
+        >
+          <div class="product-main-image wrap">
+            <div class="image-list-item {% if show_image_borders %}with-borders{% endif %}">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="product-details-wrapper">
+    <div class="
+        product-details
+        product-details-alignment-{{ details_alignment }}
+        {% if product.images.size > 1 %}
+          border
+        {% endif %}
+        {% if is_default and show_quantity == false %}
+          no-options
+        {% endif %}
+      "
+    >
+      <div class="header">
+        {% if show_brand_names %}
+          <h3 class="brand">
+            {% if product != empty %}
+              {{ product.vendor }}
+            {% else %}
+              {{ 'onboarding.product_vendor' | t }}
+            {% endif %}
+          </h3>
+        {% endif %}
+
+        <h1 class="title">
+          {% if product != empty %}
+            {{ product.title }}
+          {% else %}
+            {{ 'onboarding.product_name' | t }}
+          {% endif %}
+        </h1>
+
+        <p class="price sale">
+          {% if product != empty %}
+            {% if selected_variant.compare_at_price > selected_variant.price or product.has_only_default_variant == false %}
+              {% comment %} If product has variants, this will be dynamically hidden or shown {% endcomment %}
+              <span class="original money">{{ selected_variant.compare_at_price | money }}</span>
+            {% endif %}
+
+            <span class="money">{{ selected_variant.price | money }}</span>
+          {% else %}
+            <span class="money">{{ 'onboarding.product_price' | t }}</span>
+          {% endif %}
+        </p>
+
+        {% if show_sku and selected_variant.sku != empty %}
+          <span class="product-variant-sku">
+            <strong>
+              {{ 'products.product.sku' | t }}
+            </strong>
+
+            <span
+              data-product-variant-sku
+            >
+              {{- selected_variant.sku | default: '' -}}
+            </span>
+          </span>
+        {% endif %}
+      </div>
+
+      <div class="options {% unless show_quantity and product.variants.size > 0 %}has-no-variants{% endunless %} {% unless product.available %}unavailable{% endunless %}">
+        {% assign form_id = product.id %}
+
+        {% capture form_classes %}
+          product-form
+          {% if show_spb %}
+            product-form-has-spb
+          {% endif %}
+          {% if selected_variant.available == false %}
+            product-form-outofstock
+          {% endif %}
+        {% endcapture %}
+
+        {% if product != empty and product.available %}
+          {%
+            form 'product',
+            product,
+            id: form_id,
+            class: form_classes,
+            data-product-form: ""
+          %}
+            <div class="product-form-grid product-form-grid-{{ variant_options_style }}">
+              {% unless is_default %}
+                {%
+                  include 'product-options',
+                  style: variant_options_style,
+                %}
+              {% else %}
+                <input
+                  class="
+                    product-select
+                  "
+                  name="id"
+                  value="{{ product.variants[0].id }}"
+                  type="hidden"
+                  data-variant-title="{{ product.variants[0].title }}"
+                />
+              {% endunless %}
+
+              <div class="product-infiniteoptions js-required side-labels" id="infiniteoptions-container"></div>
+              <div class="product-uploadery js-required side-labels" id="uploadery-container"></div>
+
+              {% if show_quantity %}
+                <label
+                  class="
+                    product-quantity-label
+                  "
+                >
+                  {{ 'general.quantity' | t }}:
+                </label>
+                <input
+                  type="number"
+                  class="
+                    product-quantity-input
+                  "
+                  name="quantity"
+                  value="1"
+                  min="0"
+                  pattern="\d*"
+                >
+              {% else %}
+                <input
+                  type="hidden"
+                  name="quantity"
+                  value="1"
+                >
+              {% endif %}
+            </div>
+
+            <button
+              class="
+                product-submit
+                action-button
+                submit
+                {% if show_spb %}
+                  desaturated
+                {% endif %}
+              "
+              {% unless selected_variant.available %}
+                disabled
+              {% endunless %}
+              {% if onboarding %}
+                disabled
+              {% endif %}
+              data-product-submit
+              data-product-variant-id="{{ itemType.selected_or_first_available_variant.id }}"
+            >
+              <span class="product-card-interaction-addtocart-available">
+                {% if selected_variant.available %}
+                  {{ 'products.product_item.add_to_cart' | t }}
+                {% else %}
+                  {{ 'products.product_item.sold_out' | t }}
+                {% endif %}
+              </span>
+
+              <span class="product-card-interaction-addtocart-error">
+                {{ 'products.product_item.unavailable' | t }}
+              </span>
+
+              <div class="product-card-interaction-addtocart-spinner">
+                {% include 'icon' with 'spinner' %}
+              </div>
+            </button>
+
+            {% if show_spb %}
+              {{ form | payment_button }}
+            {% endif %}
+          {% endform %}
+        {% else %}
+          <div class="product-form unavailable">
+            <button
+              class="
+                product-submit
+                action-button
+                submit
+                unavailable
+                disabled
+              "
+              data-product-submit
+            >
+              {{ 'products.product.sold_out' | t }}
+            </button>
+          </div>
+        {% endif %}
+      </div>
+
+      {% assign product_interaction_count = 0 %}
+      {% if fitting_guide_url != blank %}
+        {% assign product_interaction_count = product_interaction_count | plus: 1 %}
+      {% endif %}
+      {% if show_email_link %}
+        {% assign product_interaction_count = product_interaction_count | plus: 1 %}
+      {% endif %}
+      {% if show_social_buttons %}
+        {% assign product_interaction_count = product_interaction_count | plus: 1 %}
+      {% endif %}
+
+      {% if product_interaction_count > 0 %}
+        <div class="product-interactions product-interactions-{{ product_interaction_count }}">
+          {% if fitting_guide_url != blank %}
+            <a
+              class="product-interaction fitting-guide"
+              href="{{ pages[fitting_guide_url].url }}"
+            >
+              {% include 'icon' with fitting_guide_icon %}
+              <span class="product-interaction-title">{{ 'products.product.fitting_guide' | t }}</span>
+            </a>
+          {% endif %}
+
+          {% if show_email_link %}
+            <a
+              class="product-interaction email-us"
+              href="mailto:{{ shop.email }}?Subject={{ product.title | escape }}"
+            >
+              {% include 'icon' with 'mail' %}
+              <span class="product-interaction-title">{{ 'products.product.email_us' | t }}</span>
+            </a>
+          {% endif %}
+
+          {% if show_social_buttons %}
+            {% assign product_canonical_url = shop.url | append: product.url %}
+            {% assign product_email_subject = 'products.product.share_email_subject' | t: product: product.title %}
+            {% assign product_email_body = 'products.product.share_email_body' | t: product: product.title, product_url: product_canonical_url %}
+
+            <div class="product-interaction share-this">
+              {%
+                include 'share-this',
+                canonical_url: product_canonical_url,
+                email_subject: product_email_subject,
+                email_body: product_email_body,
+              %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if show_description and product.description.size > 0 %}
+        <div class="description">
+          <div class="rte">{{ product.description }}</div>
+        </div>
+      {% endif %}
+
+      {% if callout %}
+        <a class="product-callout" href="{{ product.url | within: collection }}">
+          {{ 'products.product.visit_page' | t }}<span>→</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
