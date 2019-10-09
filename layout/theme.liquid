@@ -26,6 +26,9 @@
   {% endif %}
 
   {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  <!-- CUSTOM CSS -->
+  {{ 'theme-custom.css' | asset_url | stylesheet_tag }}
+  <!-- END CUSTOM CSS  -->
   {% if settings.favicon %}
     <link rel="shortcut icon" href="{{ settings.favicon | img_url: '16x16' }}" type="image/png" />
   {% endif %}
