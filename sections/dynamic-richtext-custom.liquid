@@ -1,0 +1,138 @@
+<div data-section-id="{{ section.id }}" data-section-type="rich-text">
+
+  {%- assign border = section.settings.border -%}
+  {%- assign featureBorders = section.settings.feature-borders -%}
+  {%- assign icon = section.settings.image -%}
+  {%- assign heading = section.settings.title | escape -%}
+  {%- assign caption = section.settings.content -%}
+  {%- assign buttonText = section.settings.linktext -%}
+  {%- assign buttonLink = section.settings.link -%}
+
+  <section class="
+    home-section
+    featured-text-container
+    featured-text-container--custom
+    content-area
+    {% if border %}has-border{% endif %}
+    {% if featureBorders %}feature-borders{% endif %}"
+  >
+
+    {% if icon or heading %}
+      {%- capture icon_tag -%}
+        {%- if section.settings.image != blank -%}
+          {%
+            include 'rimg'
+            img: icon,
+            alt: heading,
+            size: '120x120',
+            lazy: true
+          %}
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+      {% assign placeholder_style = 'collection-' | append: current %}
+      {% assign color = settings.accent-colour %}
+      {% assign color_string = 'fill="' | append: color | append: '" xmlns' %}
+      {% capture demo_image %}{%- include 'placeholder_svg_uri', placeholder: placeholder_style, color_string: color_string -%}{% endcapture %}
+
+      <div class="featured-text">
+
+        <div class="rich-text-icon">
+          {{ icon_tag }}
+        </div>
+
+        {% if heading != blank %}
+          <h2>{{ heading }}</h2>
+        {% endif %}
+
+        {% if caption != blank %}
+          <div class="rte">{{ caption }}</div>
+        {% endif %}
+
+        {% if buttonText != blank %}
+          <a class="action-button submit" href="{{ buttonLink }}">
+            {{ buttonText }}
+          </a>
+        {% endif %}
+
+      </div>
+
+    {% else %}
+
+      {% assign placeholder_style = 'collection-1' %}
+      {% assign color = settings.accent-colour %}
+      {% assign color_string = 'fill="' | append: color | append: '" xmlns' %}
+      {% capture demo_image %}{%- include 'placeholder_svg_uri', placeholder: placeholder_style, color_string: color_string -%}{% endcapture %}
+      <div class="featured-text">
+        <div class="rich-text-icon" style="background-image: url('{{ demo_image }}')">
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+        <h2>{{ 'onboarding.welcome_title' | t }}</h2>
+        <div class="rte">{{ 'onboarding.welcome_text_html' | t }}</div>
+        <a class="action-button submit" href="#">
+          {{ 'onboarding.welcome_title' | t }}
+        </a>
+      </div>
+    {% endif %}
+
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "Rich text - custom",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "border",
+      "label": "Show border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "feature-borders",
+      "label": "Show border between features",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Rich text with icon and button"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Text",
+      "default": "<p>Use this section to welcome customers to your store, say a bit about your brand, or share news and seasonal promotions.</p>"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "linktext",
+      "label": "Button text",
+      "default": "Click Here"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Text",
+      "name": "Rich text - custom"
+    }
+  ]
+}
+
+{% endschema %}
