@@ -28,6 +28,7 @@
           {% if forloop.last %}last{% endif %}
           {% if link.links != blank %}dropdown{% endif %}
           {% if is_meganav %}has-mega-nav{% endif %}
+          {% if link.active %}current{% endif %}
         "
 
         {% if is_dropdown or is_meganav %}
