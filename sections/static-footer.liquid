@@ -3,14 +3,15 @@
   {%- assign footerMessage = section.settings.footer-message -%}
   {%- assign paymentOptions = section.settings.footer-payment-options -%}
   {%- assign mailingList = section.settings.footer-mailing-list -%}
+  {%- assign omnisendMailingList = section.settings.footer-mailing-list-omnisend -%}
+  {%- assign socialsHeading = section.settings.footer-socials-title -%}
+  {%- assign newsletterHeading = section.settings.footer-newsletter-title -%}
+  {%- assign footerMenu = linklists[section.settings.footer-secondary-menu] -%}
   {%- assign alternateFooter = section.settings.footer-alternate -%}
-  {%- assign alternateFooterMenu = section.settings.footer-secondary-menu -%}
+  {%- assign membershipLogo = section.settings.image -%}
+  {%- assign membershipLink = section.settings.member-link -%}
 
-  {% unless alternateFooter %}
-    {% include 'footer-one' %}
-  {% else %}
-    {% include 'footer-two' %}
-  {% endunless %}
+  {% include 'footer-one' %}
 
 </div>
 
@@ -33,6 +34,11 @@
       "label": "Footer message"
     },
     {
+      "type": "text",
+      "id": "footer-socials-title",
+      "label": "Social links heading"
+    },
+    {
       "type": "checkbox",
       "id": "footer-mailing-list",
       "label": "Show newsletter form",
@@ -40,23 +46,35 @@
     },
     {
       "type": "checkbox",
+      "id": "footer-mailing-list-omnisend",
+      "label": "Use Omnisend Signup Box",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "footer-newsletter-title",
+      "label": "Newsletter form heading"
+    },
+    {
+      "type": "checkbox",
       "id": "footer-payment-options",
       "label": "Show payment icons"
     },
     {
-      "type": "header",
-      "content": "Alternate footer"
-    },
-    {
-      "type": "checkbox",
-      "id": "footer-alternate",
-      "label": "Use alternate footer layout"
-    },
-    {
       "type": "link_list",
       "id": "footer-secondary-menu",
-      "label": "Secondary footer menu",
+      "label": "Footer menu",
       "info": "This menu won't show dropdown items"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Membership logo"
+    },
+    {
+      "type": "url",
+      "id": "member-link",
+      "label": "Membership link"
     }
   ]
 }
