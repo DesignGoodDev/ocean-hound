@@ -104,27 +104,27 @@
                 {% include 'product-item-original' %}
 
               {% elsif product.options.size == 1 and product.options contains "Size" %}
-              <!-- if product has only 1 option called Size -->
+              {% comment %} <!-- if product has only 1 option called Size --> {% endcomment %}
 
                 {% include 'product-item-original' %}
                 <!-- But make sure to HIDE Buy Now button -->
 
               {% elsif product.options.size == 1 and product.options contains "Color" and product.variants.size > 1 %}
-              <!-- if product has only 1 option called Color with more than 1 Color variant -->
+              {% comment %} <!-- if product has only 1 option called Color with more than 1 Color variant --> {% endcomment %}
 
                 {% for variant in product.variants %}
 
                   {% if variant.available %}
 
                     {% include 'product-item' %}
-                    <!-- But make sure to SHOW Buy Now button -->
+                    {% comment %} <!-- But make sure to SHOW Buy Now button --> {% endcomment %}
 
                   {% endif %}
 
                 {% endfor %}
 
               {% elsif product.options.size > 1 and product.options contains "Color" and product.variants.size > 1 %}
-              <!-- if product has mult options, including Color, and has more than 1 variant -->
+              {% comment %} <!-- if product has mult options, including Color, and has more than 1 variant --> {% endcomment %}
 
                   {% assign is_complex = true %}
 
@@ -142,9 +142,11 @@
 
                 {% include 'product-item' %}
 
-              {% endif %}<!-- end if has product.variants -->
+              {% endif %}
+              {% comment %} <!-- end if has product.variants --> {% endcomment %}
 
-            {% endfor %}<!-- end main product loop -->
+            {% endfor %}
+            {% comment %} <!-- end main product loop --> {% endcomment %}
           </ul>
 
           {% if collectionSidebar and collectionSorting or sidebarMenu != empty or collection.all_tags.size > 0 and tagFilters %}
