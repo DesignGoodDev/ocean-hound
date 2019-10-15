@@ -20,6 +20,57 @@
     <div class="text-content-wrap clearfix">
       <div class="rte clearfix text-content {% if hasSidebar %}has-sidebar{% endif %}">
         {{ page.content }}
+
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <div class="extra-content" {{ block.shopify_attributes }}>
+              {%- assign heading = block.settings.title | escape -%}
+              {%- assign text = block.settings.caption -%}
+              {%- assign image = block.settings.image -%}
+              {%- assign width = block.settings.width -%}
+
+              {% if image %}
+                {%- capture image_tag -%}
+                  {%- if image -%}
+                    {%
+                      include 'rimg'
+                      img: image,
+                      alt: image.alt,
+                      size: '240x240',
+                      lazy: true
+                    %}
+                  {%- else -%}
+                    {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                {%- endcapture -%}
+
+                {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+                {% assign placeholder_style = 'collection-' | append: current %}
+                {% assign color = settings.accent-colour %}
+                {% assign color_string = 'fill="' | append: color | append: '" xmlns' %}
+                {% capture demo_image %}{%- include 'placeholder_svg_uri', placeholder: placeholder_style, color_string: color_string -%}{% endcapture %}
+
+                <div class="extra-image" style="max-width:{{ width }}px;">
+                  {{ image_tag }}
+                </div>
+              {% endif %}
+
+              {% if heading %}
+                <h2 class="
+                  extra-subheading
+                  {% if block.settings.alignment %}
+                    extra-subheading--center
+                  {% endif %}
+                ">{{ heading }}</h2>
+              {% endif %}
+
+              {% if text %}
+                <div class="extra-text {% if block.settings.alignment %} extra-text--center{% endif %}">{{ text }}</div>
+              {% endif %}
+
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
 
       {% if hasSidebar %}
@@ -67,6 +118,49 @@
       "type": "html",
       "id": "content",
       "label": "Content"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "plain_text",
+      "name": "Text block",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "alignment",
+          "label": "Align center",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "caption",
+          "label": "Text",
+          "default": "<p>Use this section to welcome customers to your store, say a bit about your brand, or share news and seasonal promotions.</p>"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "width",
+          "label": "Width (in pixels, but don't include px)",
+          "default": "240"
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,5 @@
 development:
-  password: ${THEMEKIT_PASSWORD}
+  password: 2b2c97f9675cd89b31ee7109b21cfba2
   theme_id: "77290668101"
   store: ocean-hound.myshopify.com
   ignore_files:

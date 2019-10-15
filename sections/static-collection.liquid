@@ -82,7 +82,9 @@
             {% if collectionSidebar and collectionSorting or sidebarMenu != empty or collection.all_tags.size > 0 and tagFilters %}
               product-list-withsidebar
             {% endif %}">
+
             {% for product in collection.products limit: productsPerPage %}
+
               {% assign index = forloop.index0 | downcase %}
 
               {% if section.blocks.size > 0 %}
@@ -97,8 +99,52 @@
                 {% endfor %}
               {% endif %}
 
-              {% include 'product-item' %}
-            {% endfor %}
+              {% if product.has_only_default_variant %}
+
+                {% include 'product-item-original' %}
+
+              {% elsif product.options.size == 1 and product.options contains "Size" %}
+              <!-- if product has only 1 option called Size -->
+
+                {% include 'product-item-original' %}
+                <!-- But make sure to HIDE Buy Now button -->
+
+              {% elsif product.options.size == 1 and product.options contains "Color" and product.variants.size > 1 %}
+              <!-- if product has only 1 option called Color with more than 1 Color variant -->
+
+                {% for variant in product.variants %}
+
+                  {% if variant.available %}
+
+                    {% include 'product-item' %}
+                    <!-- But make sure to SHOW Buy Now button -->
+
+                  {% endif %}
+
+                {% endfor %}
+
+              {% elsif product.options.size > 1 and product.options contains "Color" and product.variants.size > 1 %}
+              <!-- if product has mult options, including Color, and has more than 1 variant -->
+
+                  {% assign is_complex = true %}
+
+                  {% for variant in product.variants %}
+
+                    {% if variant.available %}
+
+                      {% include 'product-item' %}
+
+                    {% endif %}
+
+                  {% endfor %}
+
+              {% else %}
+
+                {% include 'product-item' %}
+
+              {% endif %}<!-- end if has product.variants -->
+
+            {% endfor %}<!-- end main product loop -->
           </ul>
 
           {% if collectionSidebar and collectionSorting or sidebarMenu != empty or collection.all_tags.size > 0 and tagFilters %}

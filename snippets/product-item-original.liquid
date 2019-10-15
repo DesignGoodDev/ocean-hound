@@ -26,13 +26,9 @@
     <h2 class="title">
       {% if onboarding %}
         {{ 'onboarding.product_name' | t }}
-      {% elsif is_complex == true %}
-        <a href="{{ variant.url | within: collection }}">
-          {{ itemType.title }} - {{ variant.option1 }}
-        </a>
       {% else %}
-        <a href="{{ variant.url | within: collection }}">
-          {{ itemType.title }} — {{ variant.title }}
+        <a href="{{ itemType.url | within: collection }}">
+          {{ itemType.title }}
         </a>
       {% endif %}
     </h2>
@@ -40,10 +36,10 @@
     {% if onboarding %}
       <p class="price"><span class="money">{{ 'onboarding.product_price' | t }}</span></p>
     {% else %}
-      {% if variant.compare_at_price > variant.price %}
-        <p class="price sale"><span class="original money">{{ variant.compare_at_price | money_without_currency }}</span> <span class="money">{{ variant.price | money }}</span></p>
+      {% if itemType.compare_at_price_min > itemType.price_min %}
+        <p class="price sale"><span class="original money">{{ itemType.compare_at_price_min | money_without_currency }}</span> <span class="money">{{ itemType.price_min | money }}</span></p>
       {% else %}
-        <p class="price"><span class="money">{{ variant.price | money }}</span></p>
+        <p class="price"><span class="money">{{ itemType.price_min | money }}</span></p>
       {% endif %}
     {% endif %}
   </div>
@@ -64,20 +60,18 @@
     <h2 class="title">
       {% if onboarding %}
         {{ 'onboarding.product_name' | t }}
-      {% elsif is_complex == true %}
-        {{ itemType.title }} - {{ variant.option1 }}
       {% else %}
-        {{ itemType.title }} — {{ variant.title }}
+        {{ itemType.title }}
       {% endif %}
     </h2>
 
     {% if onboarding %}
       <p class="price"><span class="money">{{ 'onboarding.product_price' | t }}</span></p>
     {% else %}
-      {% if variant.compare_at_price > variant.price %}
-        <p class="price sale"><span class="original money"> {{ variant.compare_at_price | money }}</span> <span class="money">{{ variant.price | money }}</span></p>
+      {% if itemType.compare_at_price_min > itemType.price_min %}
+        <p class="price sale"><span class="original money"> {{ itemType.compare_at_price_min | money }}</span> <span class="money">{{ itemType.price_min | money }}</span></p>
       {% else %}
-        <p class="price"><span class="money">{{ variant.price | money }}</span></p>
+        <p class="price"><span class="money">{{ itemType.price_min | money }}</span></p>
       {% endif %}
     {% endif %}
   </div>
@@ -90,7 +84,7 @@
         class="product-card-interaction product-card-interaction-quickshop"
         data-product-card-interaction-quickshop
         data-product-sha256="{{ itemType | json | sha256 }}"
-        data-product-url="{{ variant.url | within: collection }}"
+        data-product-url="{{ itemType.url | within: collection }}"
         {% if onboarding %}
           disabled
         {% endif %}
@@ -99,7 +93,7 @@
       </button>
     {% endif %}
 
-    {% unless product.option contains "Size" or "size" %}
+    {% unless product.options.size == 1 and product.options contains "Size" %}
       {% if enableATC %}
         <button
           class="product-card-interaction product-card-interaction-addtocart"
@@ -110,7 +104,7 @@
             disabled
           {% endif %}
           data-product-card-interaction-addtocart
-          data-product-variant-id="{{ variant.id }}"
+          data-product-variant-id="{{ itemType.selected_or_first_available_variant.id }}"
         >
           <span class="product-card-interaction-addtocart-available">
             {% if selected_variant.available %}
@@ -137,7 +131,6 @@
   class="
     product
     product-{{ itemType.id }}
-    {% if is_complex == true %}product-color-{{ variant.option1 | handleize }}{% endif %}
     {% include 'for-looper' %} {% cycle 'flush', '', '', '' %}
     {{ cardType }}
   "
@@ -152,14 +145,14 @@
           class="product-card-figure-ie"
           {%
             include 'rimg',
-            img: variant.image,
+            img: itemType.featured_image,
             size: '600x600',
             crop: 'center',
             background: true,
             lazy: true,
           %}
           role="img"
-          aria-label="{{ variant.image.alt }}"
+          aria-label="{{ itemType.featured_image.alt }}"
         ></span>
 
         {% if settings.show_product_secondary_image and itemType.images.size > 1 %}
@@ -179,24 +172,7 @@
         {% endif %}
       {% endif %}
 
-      {% if variant.image %}
-        {%
-          include 'rimg',
-          img: variant.image,
-          size: '600x',
-          lazy: true,
-        %}
-
-        {% if settings.show_product_secondary_image and itemType.images.size > 1 %}
-          {%
-            include 'rimg',
-            img: itemType.images[1],
-            size: '600x',
-            lazy: true,
-          %}
-        {% endif %}
-
-      {% elsif itemType.featured_image %}
+      {% if itemType.featured_image %}
         {%
           include 'rimg',
           img: itemType.featured_image,
@@ -220,7 +196,7 @@
       {% endif %}
 
       {% unless onboarding %}
-        <a href="{{ variant.url | within: collection }}" class="{% if imageBorders %}with-border{% endif %}"></a>
+        <a href="{{ itemType.url | within: collection }}" class="{% if imageBorders %}with-border{% endif %}"></a>
       {% endunless %}
 
       <{% if onboarding %}div{% else %}a{% endif %}
@@ -239,21 +215,7 @@
         </div>
       </{% if onboarding %}div{% else %}a{% endif %}>
 
-      <div class="badges-wrapper">
-        {% if itemType.available %}
-          {% if variant.compare_at_price > variant.price %}
-            <span class="badge badge-sale">{{ 'products.product.on_sale' | t }}</span>
-          {% endif %}
-
-          {% capture new-tag %}{{ 'products.product.new' | t }}{% endcapture %}
-          {% if product.tags contains new-tag %}
-            <span class="badge badge-new">{{ new-tag }}</span>
-          {% endif %}
-        {% else %}
-          <span class="badge badge-soldout">{{ 'products.product.sold_out' | t }}</span>
-        {% endif %}
-      </div>
-
+      {% include 'product-badges' %}
     </figure>
 
     <div class="product-card-footer">

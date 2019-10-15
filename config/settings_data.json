@@ -12,12 +12,12 @@
     "nav-link-dropdown-colour": "#ffffff",
     "nav-background-colour": "#00375b",
     "nav-border-colour": "#dee4e7",
-    "font_body": "itc_novarese_n4",
-    "font_headings": "mariposa_sans_n4",
-    "font_headings_captialize": false,
-    "font_headings_secondary": "itc_stone_sans_ii_n3",
+    "font_body": "avenir_next_n4",
+    "font_headings": "avenir_next_n5",
+    "font_headings_captialize": true,
+    "font_headings_secondary": "avenir_next_n5",
     "font_accent": "avenir_next_n3",
-    "favicon": "",
+    "favicon": "shopify:\/\/shop_images\/Favicon_32.png",
     "show-brand-names": false,
     "image-borders": false,
     "show_atc": true,
@@ -68,8 +68,8 @@
       "static-header": {
         "type": "static-header",
         "settings": {
-          "image": "",
-          "logo-width": "400",
+          "image": "shopify:\/\/shop_images\/Ocean_Hound_Logo.png",
+          "logo-width": "224",
           "header-layout": "normal",
           "center-header": true,
           "social-icons": false,
@@ -84,8 +84,8 @@
       "pxs-announcement-bar": {
         "type": "pxs-announcement-bar",
         "settings": {
-          "show_announcement": true,
-          "announcement_home_only": true,
+          "show_announcement": false,
+          "announcement_home_only": false,
           "announcement_text": "Call attention to a special discount, feature, or promotion here.",
           "announcement_text_mobile": "Use less text on mobile!",
           "announcement_link": "",
@@ -188,7 +188,7 @@
         "type": "dynamic-image-with-text",
         "settings": {
           "margin": "regular",
-          "image": "",
+          "image": "shopify:\/\/shop_images\/Ocean-Inspired_Photo.jpg",
           "alignment": "left",
           "desktop_height": "natural",
           "mobile_height": "natural",
@@ -234,7 +234,7 @@
         "type": "dynamic-image-with-text",
         "settings": {
           "margin": "none",
-          "image": "",
+          "image": "shopify:\/\/shop_images\/Strong_Products_Photo.jpg",
           "alignment": "right",
           "desktop_height": "natural",
           "mobile_height": "natural",
@@ -278,7 +278,7 @@
         "type": "dynamic-image-with-text",
         "settings": {
           "margin": "none",
-          "image": "",
+          "image": "shopify:\/\/shop_images\/Things_that_Matter_Photo.jpg",
           "alignment": "left",
           "desktop_height": "natural",
           "mobile_height": "natural",

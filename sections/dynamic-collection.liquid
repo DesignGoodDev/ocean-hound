@@ -27,14 +27,14 @@
     {% if productsCollection != blank %}
       <ul class="product-list row-of-{{ productsPerRow }}">
         {% for product in collections[productsCollection].products limit: productsLimit %}
-          {% include 'product-item' %}
+          {% include 'product-item-original' %}
         {% endfor %}
       </ul>
     {% else %}
       <ul class="product-list row-of-{{ productsPerRow }}">
         {% for i in (1..productsLimit) %}
           {%
-            include 'product-item',
+            include 'product-item-original',
             onboarding: true
           %}
         {% endfor %}
