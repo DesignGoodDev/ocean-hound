@@ -5,3 +5,5 @@
   Theme.products["{{ product.id }}"] = {{ product | json }};
   Theme.products["{{ product.id }}"].firstVariant = {{ product.selected_or_first_available_variant.id | json }};
 </script>
+
+{% include 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: false, auto_install: false %}

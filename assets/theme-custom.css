@@ -474,3 +474,31 @@ img[data-rimg="loaded"] {
 		border-bottom: 1px solid #dee4e7;
 	}
 }
+
+/* JudgeMe App */
+
+.jdgm-widget.jdgm-widget {
+	display: block;
+	width: 92%;
+	max-width: 1430px;
+	min-width: 690px;
+	padding: 0 15px;
+	margin: 0 auto;
+}
+
+.jdgm-rev-widg.jdgm-rev-widg {
+	border: 0;
+}
+
+@media (max-width: 719px) {
+	.jdgm-widget.jdgm-widget {
+		width: 100%;
+		min-width: 290px;
+	}
+}
+
+@media (max-width: 1199px) {
+	.jdgm-widget.jdgm-widget {
+		width: 95%;
+	}
+}
