@@ -28,7 +28,7 @@
         {{ 'onboarding.product_name' | t }}
       {% elsif is_complex == true %}
         <a href="{{ variant.url | within: collection }}">
-          {{ itemType.title }} - {{ variant.option1 }}
+          {{ itemType.title }} — {{ variant.option1 }}
         </a>
       {% else %}
         <a href="{{ variant.url | within: collection }}">
@@ -66,7 +66,7 @@
       {% if onboarding %}
         {{ 'onboarding.product_name' | t }}
       {% elsif is_complex == true %}
-        {{ itemType.title }} - {{ variant.option1 }}
+        {{ itemType.title }} — {{ variant.option1 }}
       {% else %}
         {{ itemType.title }} — {{ variant.title }}
       {% endif %}
