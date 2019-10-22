@@ -241,8 +241,9 @@
         </div>
       </{% if onboarding %}div{% else %}a{% endif %}>
 
+      {% comment %} in orig template this is snippet: 'product-badges' {% endcomment %}
       <div class="badges-wrapper">
-        {% if itemType.available %}
+        {% if variant.available %}
           {% if variant.compare_at_price > variant.price %}
             <span class="badge badge-sale">{{ 'products.product.on_sale' | t }}</span>
           {% endif %}

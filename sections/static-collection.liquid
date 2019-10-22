@@ -114,12 +114,12 @@
 
                 {% for variant in product.variants %}
 
-                  {% if variant.available %}
+
 
                     {% include 'product-item' %}
                     {% comment %} <!-- But make sure to SHOW Buy Now button --> {% endcomment %}
 
-                  {% endif %}
+
 
                 {% endfor %}
 
@@ -130,17 +130,17 @@
 
                   {% for variant in product.variants %}
 
-                    {% if variant.available %}
+
 
                       {% include 'product-item' %}
 
-                    {% endif %}
+
 
                   {% endfor %}
 
               {% else %}
 
-                {% include 'product-item' %}
+                {% include 'product-item-original' %}
 
               {% endif %}
               {% comment %} <!-- end if has product.variants --> {% endcomment %}
