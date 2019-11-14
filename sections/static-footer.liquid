@@ -10,6 +10,8 @@
   {%- assign alternateFooter = section.settings.footer-alternate -%}
   {%- assign membershipLogo = section.settings.image -%}
   {%- assign membershipLink = section.settings.member-link -%}
+  {%- assign copyrightLink = section.settings.credit-link -%}
+  {%- assign copyrightLinkText = section.settings.credit-link-text -%}
 
   {% include 'footer-one' %}
 
@@ -75,6 +77,16 @@
       "type": "url",
       "id": "member-link",
       "label": "Membership link"
+    },
+    {
+      "type": "url",
+      "id": "credit-link",
+      "label": "Link next to copyright"
+    },
+    {
+      "type": "text",
+      "id": "credit-link-text",
+      "label": "Text for link next to copyright"
     }
   ]
 }
