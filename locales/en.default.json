@@ -91,7 +91,7 @@
       "login_form_submit": "Enter",
       "signup_form_email_label": "Email",
       "signup_form_email_placeholder": "Your email",
-      "signup_form_submit": "Submit",
+      "signup_form_submit": "Sign Up",
       "signup_form_success": "We will send you an email right before we open!",
       "admin_link_question": "Are you the store owner?",
       "admin_link_direction": "Log in here",
@@ -323,13 +323,13 @@
       "email_us": "Email us about this product",
       "share_email_subject": "{{ product }}",
       "share_email_body": "Check out {{ product }} at {{ product_url }}!",
-      "fitting_guide": "Fitting guide",
-      "on_sale": "On sale",
+      "fitting_guide": "Size Guide",
+      "on_sale": "On Sale",
       "new": "New",
       "please_wait": "Please wait",
       "pre_order": "Pre-order",
       "sku": "SKU",
-      "sold_out": "Sold out",
+      "sold_out": "Sold Out",
       "unavailable": "Unavailable",
       "view_fullsize_image": "View fullsize image",
       "visit_page": "Visit product page",
@@ -377,6 +377,13 @@
       "products": "Products",
       "search": "Search",
       "tags_html": "Tagged \"{{ tags }}\""
+    }
+  },
+  "sections": {
+    "pxs-newsletter": {
+      "form": {
+        "submit": "Subscribe"
+      }
     }
   }
 }
