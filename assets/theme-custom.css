@@ -526,14 +526,29 @@ img[data-rimg="loaded"] {
 	padding: 0 14px;
 }
 
-.footer-credit img,
-.footer-credit svg {
-	max-width: 100%;
-	margin-top: 4px;
-	margin-bottom: -4px;
+a.dg-link {
+	width: 110px;
 }
 
-@media (max-width: 452px) {
+.credit__text {
+	font-size: 13.5px;
+	color: #00375B;
+}
+
+.dg-credit {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.footer-credit img,
+.footer-credit svg {
+	margin-top: 6px;
+	margin-left: 4px;
+}
+
+@media (max-width: 492px) {
 	.copyright {
 		display: block;
 		text-align: center;
