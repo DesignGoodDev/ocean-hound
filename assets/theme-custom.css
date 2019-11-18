@@ -19,19 +19,19 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: noto-sans, sans-serif;
+	font-family: noto-serif, serif;
 	line-height: 1.25;
 }
 
 .page-title h1.label {
-	font-family: noto-sans, sans-serif;
+	font-family: noto-serif, serif;
   	font-size: 24px;
 	line-height: 1.25;
 	letter-spacing: 3px;
 }
 
 h2.title {
-	font-family: noto-sans, sans-serif;
+	font-family: noto-serif, serif;
 	font-size: 66px;
 	line-height: 1.15;
 	letter-spacing: 2px;
@@ -43,7 +43,7 @@ h2.title {
 
 .template-index .slide .content h2.title,
 .template-index .slide--mobile .content h2.title {
-	font-family: noto-sans, sans-serif;
+	font-family: noto-serif, serif;
 }
 
 .template-index .slide--mobile .content h2.title {
@@ -52,7 +52,7 @@ h2.title {
 }
 
 h2.section-title {
-	font-family: noto-sans, sans-serif;
+	font-family: noto-serif, serif;
 	font-size: 36px;
 	line-height: 1.25;
 	text-transform: none;
@@ -60,7 +60,7 @@ h2.section-title {
 }
 
 h2.picture-block-heading {
-	font-family: noto-sans, sans-serif;
+	font-family: noto-serif, serif;
 	font-size: 36px;
 	line-height: 1.25;
 	letter-spacing: normal;
@@ -424,7 +424,7 @@ img[data-rimg="loaded"] {
 }
 
 .picture-block {
-	background-color: #e2edf4;
+	background-color: #edf4f8;
 	padding-bottom: 0;
 }
 
