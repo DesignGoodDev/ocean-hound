@@ -576,8 +576,8 @@ a.dg-link {
 
 .collection-title .label,
 .template-collection .page-title.collection-title .label {
-	font-family: noto-sans, sans-serif;
-  	font-size: 24px;
+	/* font-family: noto-sans, sans-serif; */
+	font-size: 24px;
 	padding-top: 30px;
 	padding-bottom: 4px;
 }

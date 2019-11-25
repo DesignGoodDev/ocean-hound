@@ -36,6 +36,8 @@
 
     {% if onboarding %}
       <p class="price"><span class="money">{{ 'onboarding.product_price' | t }}</span></p>
+    {% elsif itemType.price_varies %}
+      <p class="price">From <span class="money">{{ itemType.price | money }}</span></p>
     {% else %}
       {% if itemType.compare_at_price_min > itemType.price_min %}
         <p class="price sale"><span class="original money">{{ itemType.compare_at_price_min | money_without_currency }}</span> <span class="money">{{ itemType.price_min | money }}</span></p>
